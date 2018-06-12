@@ -8,6 +8,10 @@ class HangmanGame {
     this.failures = [];
   }
 
+  addWord(word) {
+    this.secretWords.push(word);
+  }
+
   start () {
     this.secretWord = this.selectRandomWord();
     this.playerWord = this.initializePlayerWord();
@@ -32,9 +36,11 @@ class HangmanGame {
   }
 
   status() {
-    console.log(this.playerWord);
-    console.log(`You have ${this.attemptsRemaining} attempts left!`);
-    this.printHangman();
+    if (!this.isOver()) {
+      console.log(this.playerWord);
+      console.log(`You have ${this.attemptsRemaining} attempts left!`);
+      this.printHangman();
+    }
   }
 
   guessLetter(letter) {
@@ -59,6 +65,26 @@ class HangmanGame {
       }
     }
     this.playerWord = playerWordPlaceHolder;
+  }
+
+  isOver() {
+    if(this.attemptsRemaining === 0) {
+      this.lose();
+      return true;
+    } else if(this.playerWord.indexOf('_') === -1) {
+      this.win();
+      return true;
+    }
+    return false;
+  }
+
+  lose() {
+    console.log('Sorry, loser! Best luck next time.')
+  }
+
+  win() {
+    console.log(`That is right, the secret word was: ${this.secretWord}.`)
+    console.log('You are simply the best!')
   }
 
   printHangman() {
